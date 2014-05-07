@@ -1,28 +1,57 @@
 #include "mq_channel.h"
-#include <zmq.h>
+#include "mq_process.h"
+#include <sys/wait.h>
 #include <string.h>
+#include <zmq.h>
 
 #define MQ_CMDSIZE 256
 
-#define MQ_CMDMAXARG 4
+#define MQ_CMDMAXARG 5
 struct mq_command_t {
     int    argc;
     void  *argv[MQ_CMDMAXARG];
 };
 
-int mq_main(void *zsock)
+static int mq_sigchld = 0;
+
+void *mq_manage_ctx;
+void *mq_manage_sock;
+
+static void mq_sigchld_handler(int signum)
+{
+    if (signum == SIGCHLD) {
+        mq_sigchld = 1;
+    }
+}
+
+int mq_main(void)
 {
     int   nrecv, i, state;
     char  command[MQ_CMDSIZE], *p;
 
     struct mq_command_t cmd;
 
+    signal(SIGCHLD, mq_sigchld_handler);
+
     while (1) {
         memset(command, '\0', sizeof command);
-        nrecv = zmq_recv(zsock, command, MQ_CMDSIZE, 0);
+        nrecv = zmq_recv(mq_manage_sock, command, MQ_CMDSIZE, 0);
+        mq_time_update();
+        if (nrecv == -1 && errno == EINTR) {
+            if (mq_sigchld == 1) {
+                mq_sigchld = 0;
+                mq_update_children_process_info();
+            }
+            continue;
+        }
+#ifdef MQ_DEBUG
+        mq_log_debug("nrecv: %d, errno: %d\n", nrecv, errno);
+#endif
 
         if (nrecv >= MQ_CMDSIZE) {
             command[MQ_CMDSIZE - 1] = '\0';
+            /* REQ-REP model need to response */
+            zmq_send(mq_manage_sock, "", 0, 0);
             mq_log_error("Command too long: %s\n", command);
             continue;
         }
@@ -75,20 +104,46 @@ int mq_main(void *zsock)
         switch (cmd.argc) {
             case 1:
                 /* 1 op cmd */
+                if (strcasecmp("info", cmd.argv[0]) == 0) {
+                    mq_get_process_info(mq_manage_sock);
+                }
                 break;
             case 2:
                 /* 2 op cmd */
                 break;
             case 3:
                 /* 3 op cmd */
-                if (strcasecmp("create_channel", cmd.argv[0]) == 0) {
-                    /* create_channel [req-rep | pub-sub | push-pull] [tcp://xxx:xxx] */
+                break;
+
+            case 5:
+                /* push - pull MQ
+                   create input xxx://xxx:xxxx output xxx://xxx:xxxx */
+                if (strcasecmp("create", cmd.argv[0]) == 0
+                        && strcasecmp("input", cmd.argv[1]) == 0
+                        && strcasecmp("output", cmd.argv[3]) == 0)
+                {
+                    mq_spawn_process(ZMQ_PULL, cmd.argv[2], ZMQ_PUSH, cmd.argv[4]);
+
+                } else if (strcasecmp("destroy", cmd.argv[0]) == 0
+                        && strcasecmp("input", cmd.argv[1]) == 0
+                        && strcasecmp("output", cmd.argv[3]) == 0)
+                {
+                    mq_kill_process(cmd.argv[2], cmd.argv[4]);
+
+                } else {
+                    mq_log_error("illegal cmd: %s %s %s %s %s\n", 
+                            cmd.argv[0], cmd.argv[1], cmd.argv[2],
+                            cmd.argv[3], cmd.argv[4]);
                 }
                 break;
+
             default:
                 mq_log_error("commond error\n");
                 break;
         }
+        /* REQ-REP model need to response */
+        zmq_send(mq_manage_sock, "", 0, 0);
+        errno = 0;
     }
 }
 
@@ -108,9 +163,11 @@ int main(int argc, char *argv[])
     if (argc > 1) {
         manage_channel = argv[1];
     } else {
-        manage_channel = "tcp://localhost:5555";
+        //manage_channel = "tcp://localhost:5555";
+        manage_channel = "tcp://*:5555";
     }
 
-    return mq_create_channel(MQ_CHANNEL_MANAGE, manage_channel);
+    mq_create_manage_channel(manage_channel);
+    return 0;
 }
 
