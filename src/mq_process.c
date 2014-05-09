@@ -175,7 +175,6 @@ void mq_get_process_info(void *rep)
     int   i, nsnd;
     char  msg[4096];
 
-    mq_log_debug("==========\nmq_get_process_info: n = %d\n", mq_process_n);
     zmq_send(rep, "mq process info:\n", sizeof("mq process info:\n"), ZMQ_SNDMORE);
     for (i = 0; i != mq_process_n; ++i) {
         memset(msg, '\0', 4096);
@@ -187,7 +186,6 @@ void mq_get_process_info(void *rep)
                 mq_process[i].input_addr, 
                 mq_ztype[mq_process[i].output_type],
                 mq_process[i].output_addr);
-        mq_log_debug("msg = %s\n", msg);
         zmq_send(rep, msg, nsnd, ZMQ_SNDMORE);
     }
     //zmq_send(rep, "", 1, 0);

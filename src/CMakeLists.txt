@@ -1,5 +1,0 @@
-INCLUDE_DIRECTORIES (.)
-SET (SRC_FILES mq_log.c mq_timer.c mq_channel.c mq_process.c mq_main.c)
-LINK_DIRECTORIES (/usr/local/lib)
-ADD_EXECUTABLE (mq_platform ${SRC_FILES})
-TARGET_LINK_LIBRARIES (mq_platform zmq.a ${CMAKE_THREAD_LIBS_INIT})

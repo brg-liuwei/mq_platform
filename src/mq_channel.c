@@ -54,11 +54,12 @@ int mq_channel_poll(void *input, void *output, void *controller)
         zmq_poll(items, 2, 1000);
         mq_time_update();
         if (items[0].revents & ZMQ_POLLIN) {
-            do {
+            //do {
                 nrcv = zmq_recv(input, buf, sizeof buf, 0);
-                zmq_getsockopt(input, ZMQ_RCVMORE, &rcv_more, &rcv_more_size);
-                zmq_send(output, buf, nrcv, rcv_more == 0 ? 0 : ZMQ_SNDMORE);
-            } while (rcv_more);
+            //  zmq_getsockopt(input, ZMQ_RCVMORE, &rcv_more, &rcv_more_size);
+            //  zmq_send(output, buf, nrcv, rcv_more == 0 ? 0 : ZMQ_SNDMORE);
+                zmq_send(output, buf, nrcv, 0);
+            //} while (rcv_more);
         }
         if (items[1].revents & ZMQ_POLLIN) {
             nrcv = zmq_recv(controller, buf, sizeof buf, 0);

@@ -5,3 +5,4 @@ rm -rf src/md_config.h
 rm -f *.log
 rm -f cmake_install.cmake
 rm -f Makefile
+rm -f install_manifest.txt

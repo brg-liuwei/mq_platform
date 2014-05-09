@@ -1,7 +1,13 @@
 #include "mq_channel.h"
 #include "mq_process.h"
+#include <sys/stat.h>
+#include <sys/resource.h>
 #include <sys/wait.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 #include <zmq.h>
 
 #define MQ_CMDSIZE 256
@@ -147,14 +153,77 @@ int mq_main(void)
     }
 }
 
+void daemonize(void)
+{
+    int               i;
+    pid_t             pid;
+    struct rlimit     rl;
+    struct sigaction  sa;
+
+    umask(0);
+
+    switch (pid = fork()) {
+        case -1:
+            exit(1);
+        case 0:  /* child */
+            break;
+        default:  /* father */
+            exit(0);
+    }
+
+    setsid();
+
+    sa.sa_handler = SIG_IGN;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    if (sigaction(SIGHUP, &sa, NULL) < 0) {
+        exit(2);
+    }
+
+    switch (pid = fork()) {
+        case -1:
+            exit(3);
+        case 0:  /* child */
+            break;
+        default:  /* father */
+            exit(0);
+    }
+
+    if (chdir("/") < 0) {
+        exit(4);
+    }
+
+    if (getrlimit(RLIMIT_NOFILE, &rl) < 0) {
+        exit(5);
+    }
+    if (rl.rlim_max == RLIM_INFINITY) {
+        rl.rlim_max = 1024;
+    }
+    for (i = 0; i < rl.rlim_max; ++i) {
+        close(i);
+    }
+    
+    if (open("/dev/null", O_RDWR) != 0) {
+        exit(6);
+    }
+    if (dup(0) != 1) {
+        exit(7);
+    }
+    if (dup(0) != 2) {
+        exit(8);
+    }
+}
+
 int main(int argc, char *argv[])
 {
     const char *manage_channel;
 
-    // daemonize();
+    daemonize();
 
     /* TODO: read conf file and init log and manage channel */
-    mq_log_init(MQ_LOG_DEBUG, "mq_debug.log");
+    if (mq_log_init(MQ_LOG_DEBUG, "mq_debug.log") < 0) {
+        exit(9);
+    }
     mq_log_init(MQ_LOG_INFO, "mq_info.log");
     mq_log_init(MQ_LOG_ERROR, "mq_error.log");
 
