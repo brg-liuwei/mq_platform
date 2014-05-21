@@ -51,19 +51,19 @@ src/mq_channel.o: src/mq_channel.c src/mq_channel.h src/mq_log.h \
   /usr/include/sys/_types/_sigset_t.h /usr/include/Availability.h \
   /usr/include/AvailabilityInternal.h /usr/include/sys/time.h \
   /usr/include/sys/_types/_timeval.h /usr/include/sys/_select.h \
-  /usr/include/unistd.h /usr/include/sys/unistd.h \
-  /usr/include/sys/_types/_posix_vdisable.h \
+  src/mq_io.h \
+  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/5.1/include/stdint.h \
+  /usr/include/stdint.h /usr/include/_types/_uint8_t.h \
+  /usr/include/_types/_uint16_t.h /usr/include/_types/_uint32_t.h \
+  /usr/include/_types/_uint64_t.h /usr/include/_types/_intmax_t.h \
+  /usr/include/_types/_uintmax_t.h /usr/include/unistd.h \
+  /usr/include/sys/unistd.h /usr/include/sys/_types/_posix_vdisable.h \
   /usr/include/sys/_types/_seek_set.h /usr/include/sys/select.h \
   /usr/include/sys/_types/_uuid_t.h /usr/include/gethostuuid.h \
   /usr/local/include/zmq.h /usr/include/errno.h /usr/include/sys/errno.h \
   /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/5.1/include/stddef.h \
   /usr/include/stdio.h /usr/include/sys/_types/_va_list.h \
-  /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
-  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/5.1/include/stdint.h \
-  /usr/include/stdint.h /usr/include/_types/_uint8_t.h \
-  /usr/include/_types/_uint16_t.h /usr/include/_types/_uint32_t.h \
-  /usr/include/_types/_uint64_t.h /usr/include/_types/_intmax_t.h \
-  /usr/include/_types/_uintmax_t.h
+  /usr/include/secure/_stdio.h /usr/include/secure/_common.h
 
 src/mq_channel.h:
 
@@ -233,6 +233,24 @@ src/mq_timer.h:
 
 /usr/include/sys/_select.h:
 
+src/mq_io.h:
+
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/5.1/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/_types/_uint8_t.h:
+
+/usr/include/_types/_uint16_t.h:
+
+/usr/include/_types/_uint32_t.h:
+
+/usr/include/_types/_uint64_t.h:
+
+/usr/include/_types/_intmax_t.h:
+
+/usr/include/_types/_uintmax_t.h:
+
 /usr/include/unistd.h:
 
 /usr/include/sys/unistd.h:
@@ -262,19 +280,3 @@ src/mq_timer.h:
 /usr/include/secure/_stdio.h:
 
 /usr/include/secure/_common.h:
-
-/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/5.1/include/stdint.h:
-
-/usr/include/stdint.h:
-
-/usr/include/_types/_uint8_t.h:
-
-/usr/include/_types/_uint16_t.h:
-
-/usr/include/_types/_uint32_t.h:
-
-/usr/include/_types/_uint64_t.h:
-
-/usr/include/_types/_intmax_t.h:
-
-/usr/include/_types/_uintmax_t.h:

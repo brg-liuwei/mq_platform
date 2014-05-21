@@ -1,4 +1,5 @@
 #include "mq_channel.h"
+#include "mq_io.h"
 #include <unistd.h>
 #include <zmq.h>
 
@@ -40,28 +41,49 @@ free1:
 
 int mq_channel_poll(void *input, void *output, void *controller)
 {
-    int    nrcv, rcv_more;
-    char   buf[4096];
-    size_t rcv_more_size;
+    int            nrcv, rcv_more;
+    char           buf[1024 * 1024];
+    mq_msg_hdr_t  *msg_hdr;
 
     zmq_pollitem_t items[] = {
         {input, 0, ZMQ_POLLIN, 0},
+        {output, 0, ZMQ_POLLIN | ZMQ_POLLOUT, 0},  /* ZMQ_POLLIN for res-rep mode */
         {controller, 0, ZMQ_POLLIN, 0},
     };
 
-    rcv_more_size = sizeof rcv_more;
+    int val = 3;
+    zmq_setsockopt(output, ZMQ_SNDHWM, &val, sizeof val);
+    mq_io_init();
     while (1) {
-        zmq_poll(items, 2, 1000);
+        zmq_poll(items, 3, 1000);
         mq_time_update();
+
         if (items[0].revents & ZMQ_POLLIN) {
-            //do {
-                nrcv = zmq_recv(input, buf, sizeof buf, 0);
-            //  zmq_getsockopt(input, ZMQ_RCVMORE, &rcv_more, &rcv_more_size);
-            //  zmq_send(output, buf, nrcv, rcv_more == 0 ? 0 : ZMQ_SNDMORE);
-                zmq_send(output, buf, nrcv, 0);
-            //} while (rcv_more);
+            nrcv = zmq_recv(input, buf, sizeof buf, 0);
+            mq_write_msg(buf, nrcv);
         }
+
         if (items[1].revents & ZMQ_POLLIN) {
+            nrcv = zmq_recv(output, buf, sizeof buf, 0);
+            zmq_send(input, buf, nrcv, 0);
+        }
+
+        if (items[1].revents & ZMQ_POLLOUT) {
+            msg_hdr = mq_read_msg();
+            if (msg_hdr != NULL) {
+                zmq_send(output, msg_hdr->msg, msg_hdr->msg_size, 0);
+            } else {
+                if (!(items[0].revents & ZMQ_POLLIN)
+                        && !(items[0].revents & ZMQ_POLLIN)
+                        && !(items[2].revents & ZMQ_POLLIN))
+                {
+                    sleep(1);
+                }
+
+            }
+        }
+
+        if (items[2].revents & ZMQ_POLLIN) {
             nrcv = zmq_recv(controller, buf, sizeof buf, 0);
 #ifdef MQ_DEBUG
             mq_log_debug("[%d] controller recv cmd: %s\n", getpid(), buf);

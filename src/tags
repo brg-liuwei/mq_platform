@@ -1,0 +1,85 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+MQLOGMAXLINE	mq_log.c	11;"	d	file:
+MQ_CHANNELSIZE	mq_process.h	8;"	d
+MQ_CHANNEL_ILLEGAL	mq_channel.h	/^    MQ_CHANNEL_ILLEGAL$/;"	e	enum:__anon1
+MQ_CHANNEL_MANAGE	mq_channel.h	/^    MQ_CHANNEL_MANAGE,$/;"	e	enum:__anon1
+MQ_CHANNEL_PUBSUB	mq_channel.h	/^    MQ_CHANNEL_PUBSUB,$/;"	e	enum:__anon1
+MQ_CHANNEL_PUSHPULL	mq_channel.h	/^    MQ_CHANNEL_PUSHPULL,$/;"	e	enum:__anon1
+MQ_CHANNEL_REQREP	mq_channel.h	/^    MQ_CHANNEL_REQREP,$/;"	e	enum:__anon1
+MQ_CMDMAXARG	mq_main.c	15;"	d	file:
+MQ_CMDSIZE	mq_main.c	13;"	d	file:
+MQ_LOG_DEBUG	mq_log.h	/^    MQ_LOG_DEBUG,$/;"	e	enum:__anon2
+MQ_LOG_ERROR	mq_log.h	/^    MQ_LOG_ERROR,$/;"	e	enum:__anon2
+MQ_LOG_INFO	mq_log.h	/^    MQ_LOG_INFO,$/;"	e	enum:__anon2
+MQ_MAXPROCESS	mq_process.c	9;"	d	file:
+MQ_TIME_SIZE	mq_timer.c	8;"	d	file:
+MQ_TIME_SIZE_PART	mq_timer.c	9;"	d	file:
+MQ_TIME_SLOTS	mq_timer.c	7;"	d	file:
+__MQ_CHANNEL_H__	mq_channel.h	2;"	d
+__MQ_LOGGER_H__	mq_log.h	2;"	d
+__MQ_PROCESS_H__	mq_process.h	2;"	d
+__MQ_TIME_H__	mq_timer.h	3;"	d
+__mq_log_fmt	mq_log.c	/^void __mq_log_fmt(mq_log_type_t type, const char *file, size_t line, const char *fmt, ...)$/;"	f
+argc	mq_main.c	/^    int    argc;$/;"	m	struct:mq_command_t	file:
+argv	mq_main.c	/^    void  *argv[MQ_CMDMAXARG];$/;"	m	struct:mq_command_t	file:
+controller	mq_process.h	/^    void     *controller;$/;"	m	struct:mq_proc_s
+cur	mq_timer.c	/^    time_t   cur;$/;"	m	struct:mq_time_t	file:
+daemonize	mq_main.c	/^void daemonize(void)$/;"	f
+input_addr	mq_process.h	/^    char      input_addr[MQ_CHANNELSIZE];$/;"	m	struct:mq_proc_s
+input_type	mq_process.h	/^    int       input_type;$/;"	m	struct:mq_proc_s
+main	mq_main.c	/^int main(int argc, char *argv[])$/;"	f
+mq_channel_poll	mq_channel.c	/^int mq_channel_poll(void *input, void *output, void *controller)$/;"	f
+mq_channel_type_t	mq_channel.h	/^} mq_channel_type_t;$/;"	t	typeref:enum:__anon1
+mq_command_t	mq_main.c	/^struct mq_command_t {$/;"	s	file:
+mq_create_channel	mq_channel.c	/^void *mq_create_channel(int type, const char *channel_name)$/;"	f
+mq_create_manage_channel	mq_channel.c	/^int mq_create_manage_channel(const char *channel)$/;"	f
+mq_cur_msec	mq_timer.c	/^inline time_t mq_cur_msec()$/;"	f
+mq_cur_sec	mq_timer.c	/^inline time_t mq_cur_sec()$/;"	f
+mq_cur_time_str	mq_timer.c	/^inline const char *mq_cur_time_str()$/;"	f
+mq_current	mq_timer.c	/^inline time_t mq_current()$/;"	f
+mq_debug_log_fd	mq_log.c	/^static int mq_debug_log_fd;$/;"	v	file:
+mq_err_log_fd	mq_log.c	/^static int mq_err_log_fd;$/;"	v	file:
+mq_execute_cmd	mq_main.c	/^static void mq_execute_cmd(struct mq_command_t *cmd)$/;"	f	file:
+mq_get_cmd	mq_main.c	/^static void mq_get_cmd(struct mq_command_t *cmd, char *command)$/;"	f	file:
+mq_get_input_type	mq_main.c	/^static int mq_get_input_type(const char *in)$/;"	f	file:
+mq_get_output_type	mq_main.c	/^static int mq_get_output_type(const char *out)$/;"	f	file:
+mq_get_process_info	mq_process.c	/^void mq_get_process_info(void *rep)$/;"	f
+mq_info_log_fd	mq_log.c	/^static int mq_info_log_fd;$/;"	v	file:
+mq_kill_process	mq_process.c	/^void mq_kill_process(const char *input_ch, const char *output_ch)$/;"	f
+mq_log_debug	mq_log.h	16;"	d
+mq_log_error	mq_log.h	18;"	d
+mq_log_info	mq_log.h	17;"	d
+mq_log_init	mq_log.c	/^int mq_log_init(mq_log_type_t type, const char *path)$/;"	f
+mq_log_type_t	mq_log.h	/^} mq_log_type_t;$/;"	t	typeref:enum:__anon2
+mq_main	mq_main.c	/^int mq_main(void)$/;"	f
+mq_manage_ctx	mq_main.c	/^void *mq_manage_ctx;$/;"	v
+mq_manage_sock	mq_main.c	/^void *mq_manage_sock;$/;"	v
+mq_proc_s	mq_process.h	/^typedef struct mq_proc_s {$/;"	s
+mq_proc_t	mq_process.h	/^} mq_proc_t;$/;"	t	typeref:struct:mq_proc_s
+mq_process	mq_process.c	/^static mq_proc_t mq_process[MQ_MAXPROCESS];$/;"	v	file:
+mq_process_n	mq_process.c	/^static int mq_process_n = 0;$/;"	v	file:
+mq_sigchld	mq_main.c	/^static int mq_sigchld = 0;$/;"	v	file:
+mq_sigchld_handler	mq_main.c	/^static void mq_sigchld_handler(int signum)$/;"	f	file:
+mq_spawn_process	mq_process.c	/^void mq_spawn_process(int input_zmq_type, const char *input_ch,$/;"	f
+mq_time	mq_timer.c	/^static volatile struct mq_time_t mq_time;$/;"	v	typeref:struct:mq_time_t	file:
+mq_time_fmt	mq_timer.c	/^static const char mq_time_fmt[] = "%04d-%02d-%02d %02d:%02d:%02d %03ld ";$/;"	v	file:
+mq_time_init	mq_timer.c	/^void mq_time_init()$/;"	f
+mq_time_mutex	mq_timer.c	/^static pthread_mutex_t mq_time_mutex;$/;"	v	file:
+mq_time_str	mq_timer.c	/^static char mq_time_str[MQ_TIME_SLOTS][MQ_TIME_SIZE];$/;"	v	file:
+mq_time_t	mq_timer.c	/^struct mq_time_t {$/;"	s	file:
+mq_time_update	mq_timer.c	/^void mq_time_update()$/;"	f
+mq_time_update_signal	mq_timer.c	/^static void mq_time_update_signal(int signum)$/;"	f	file:
+mq_update_children_process_info	mq_process.c	/^void mq_update_children_process_info()$/;"	f
+mq_ztype	mq_process.c	/^static const char mq_ztype[][16] = {$/;"	v	file:
+msec	mq_timer.c	/^    time_t   msec;$/;"	m	struct:mq_time_t	file:
+output_addr	mq_process.h	/^    char      output_addr[MQ_CHANNELSIZE];$/;"	m	struct:mq_proc_s
+output_type	mq_process.h	/^    int       output_type;$/;"	m	struct:mq_proc_s
+pid	mq_process.h	/^    pid_t     pid;$/;"	m	struct:mq_proc_s
+sec	mq_timer.c	/^    time_t   sec;$/;"	m	struct:mq_time_t	file:
+slot	mq_timer.c	/^    size_t   slot;$/;"	m	struct:mq_time_t	file:
+zctx	mq_process.h	/^    void     *zctx;$/;"	m	struct:mq_proc_s
